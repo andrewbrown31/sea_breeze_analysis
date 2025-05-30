@@ -41,7 +41,7 @@ if __name__ == "__main__":
         print("Not subtracting daily mean...")
 
     #Initiate distributed dask client on the Gadi HPC
-    client = Client()
+    client = Client(scheduler_file=os.environ["DASK_PBS_SCHEDULER"])
 
     #Set the domain bounds
     lat_slice=slice(args.lat1,args.lat2)
@@ -151,7 +151,7 @@ if __name__ == "__main__":
 
     #Calc SBI
     aus2200_wind = xr.Dataset({"u":aus2200_ua,"v":aus2200_va})
-    aus2200_wind = aus2200_wind.chunk(chunks={"lev":-1,
+    aus2200_wind = aus2200_wind.chunk(chunks={"height":-1,
                                                 "time":1,
                                                 "lat":500,
                                                 "lon":-1})
@@ -162,7 +162,7 @@ if __name__ == "__main__":
                                 height_method=height_method,
                                 blh_da=aus2200_zmla,
                                 height_mean=height_mean,
-                                vert_coord="lev")
+                                vert_coord="height")
     progress(sbi)
 
     #Save output

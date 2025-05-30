@@ -17,4 +17,4 @@ module use /g/data/dk92/apps/Modules/modulefiles
 module load gadi_jupyterlab/23.02
 jupyter.ini.sh -D
 
-python /home/548/ab4502/working/sea_breeze/compute_percentiles.py
+python /home/548/ab4502/working/sea_breeze_analysis/compute_percentiles.py

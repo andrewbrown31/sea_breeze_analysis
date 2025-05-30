@@ -2,25 +2,26 @@
 
 #PBS -P ng72 
 #PBS -q hugemem
-#PBS -l walltime=24:00:00,mem=300GB 
+#PBS -l walltime=06:00:00,mem=512GB 
 #PBS -l ncpus=48
 #PBS -l jobfs=32gb
 #PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/aus2200_smooth_s4_filter_percentile1.o 
 #PBS -e /home/548/ab4502/working/ExtremeWind/jobs/messages/aus2200_smooth_s4_filter_percentile1.e
-#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65
+#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92
  
 #Set up conda/shell environments 
-#module use /g/data/xp65/public/modules
-#module load conda/analysis3-24.07
-module use /g/data/hh5/public/modules
-module load dask-optimiser
-module load conda/analysis3
+module use /g/data/xp65/public/modules
+module load conda/analysis3-24.07
+
+module use /g/data/dk92/apps/Modules/modulefiles
+module load gadi_jupyterlab/23.02
+jupyter.ini.sh -D
 
 #Threshold settings for Aus2200 (99.0th percentile)
 #fc_threshold="15.241098"
 f_threshold="11.857627070702305"	
-fuzzy_threshold="0.22350959754908623"
-sbi_threshold="0.006739848164963093"
+fuzzy_threshold="0.14841957492083702"
+sbi_threshold="0.055332979086883435"
 
 #Set the start and end dates, and the current date as the start date
 start_date="2013-01-01"
@@ -79,10 +80,10 @@ while [[ "$current_date" < "$end_date" ]]; do
             # python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name no_hourly_change --field_name Fc --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fc_threshold --exp_id $exp_id
 
             #F
-            python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name percentile1 --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold --exp_id $exp_id
+            # python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name percentile1 --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold --exp_id $exp_id
 
             #Fuzzy
-            python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name percentile1 --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold --exp_id $exp_id
+            # python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name percentile1 --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold --exp_id $exp_id
 
             #sbi
             python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name percentile1 --field_name sbi --t1 "$sbi_start_time" --t2 "$end_time" --threshold fixed --threshold_value $sbi_threshold --exp_id $exp_id

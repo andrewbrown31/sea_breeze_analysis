@@ -10,19 +10,18 @@
 #PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92
  
 #Set up conda/shell environments 
-module use /g/data/dk92/apps/Modules/modulefiles
 module use /g/data/xp65/public/modules
-
-module load gadi_jupyterlab/23.02
 module load conda/analysis3-24.07
 
+module use /g/data/dk92/apps/Modules/modulefiles
+module load gadi_jupyterlab/23.02
 jupyter.ini.sh -D
 
 #Threshold settings for Aus2200
 #fc_threshold="15.241098"
 f_threshold="18.796545"	
 fuzzy_threshold="0.19803287195690583"
-sbi_threshold="0.2730420"
+sbi_threshold="0.4101175965796785"
 
 #Set the start and end dates, and the current date as the start date
 start_date="2013-01-01"
@@ -84,10 +83,10 @@ while [[ "$current_date" < "$end_date" ]]; do
             # python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name no_hourly_change --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold --exp_id $exp_id
 
             #Fuzzy
-            python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name no_hourly_change --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold --exp_id $exp_id
+            #python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name no_hourly_change --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold --exp_id $exp_id
 
             #sbi
-            # python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name no_hourly_change --field_name sbi --t1 "$sbi_start_time" --t2 "$end_time" --threshold fixed --threshold_value $sbi_threshold --exp_id $exp_id
+            python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name no_hourly_change --field_name sbi --t1 "$sbi_start_time" --t2 "$end_time" --threshold fixed --threshold_value $sbi_threshold --exp_id $exp_id
 
         fi
     fi
