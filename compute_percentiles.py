@@ -13,10 +13,11 @@ if __name__ == "__main__":
 
     # Set up the parameters
     #fields = ["F","Fc","sbi","fuzzy"]
-    fields = ["sbi"]
-    p_list = [99.0,99.5,99.9]
+    fields = ["F","fuzzy","sbi"]
+    p_list = [95.0,97.5,99.0,99.5,99.9]
     #models = ["era5","barra_r","barra_c_smooth_s2","aus2200_smooth_s4"]
-    models = ["aus2200_smooth_s2","aus2200_smooth_s4","aus2200_smooth_s6"]
+    #models = ["aus2200_smooth_s2","aus2200_smooth_s4","aus2200_smooth_s6"]
+    models = ["aus2200_smooth_s4"]
 
     # Create a DataFrame to store the results
     vals_df = pd.DataFrame(index=models,columns=fields)
@@ -37,7 +38,7 @@ if __name__ == "__main__":
                     vals_df.at[model,field] = np.array(percentile(da,p))[0]
         
         # Save the results to a CSV file
-        vals_df.to_csv("/g/data/ng72/ab4502/sea_breeze_detection/percentiles/percentiles_aus2200_sbi_"+str(p)+"_2013_2018.csv")
+        vals_df.to_csv("/g/data/ng72/ab4502/sea_breeze_detection/percentiles/percentiles_aus2200_"+str(p)+"_2013_2018.csv")
 
     # Close the Dask client
     client.close()

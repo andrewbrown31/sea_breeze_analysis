@@ -5,6 +5,7 @@ import pandas as pd
 import argparse
 import xarray as xr
 import numpy as np
+from sea_breeze_analysis.wind_turbine_power_curve import capacity_factor
 
 if __name__ == "__main__":
 
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     lat_slice, lon_slice = utils.get_aus_bounds()    
 
     #Load U wind and V wind components
-    uas = load_model_data.load_barra_variable(
+    u = load_model_data.load_barra_variable(
         u_var,
         t1,
         t2,
@@ -41,8 +42,8 @@ if __name__ == "__main__":
         "1hr",
         lat_slice,
         lon_slice,
-        chunks={"time":-1,"lat":{},"lon":{}})
-    vas = load_model_data.load_barra_variable(
+        chunks={"time":1,"lat":-1,"lon":-1})
+    v = load_model_data.load_barra_variable(
         v_var,
         t1,
         t2,
@@ -50,7 +51,7 @@ if __name__ == "__main__":
         "1hr",
         lat_slice,
         lon_slice,
-        chunks={"time":-1,"lat":{},"lon":{}})
+        chunks={"time":1,"lat":-1,"lon":-1})
     angle_ds = load_model_data.get_coastline_angle_kernel(
         compute=False,
         path_to_load="/g/data/ng72/ab4502/coastline_data/barra_c.nc",
@@ -58,27 +59,20 @@ if __name__ == "__main__":
         lon_slice=lon_slice)
     
     # Rotate the wind components
-    uprime, vprime = sea_breeze_funcs.rotate_wind(uas,vas,angle_ds.angle_interp)
+    uprime, vprime = sea_breeze_funcs.rotate_wind(u,v,angle_ds.angle_interp)
 
-    #TODO, as well as calculating the vprime perturbation, also calculate the wind speed perturbation, and the wind power capacity factor perturbation
+    #Calculate the wind speed, and the wind power capacity factor
+    ws = np.sqrt(u**2 + v**2)
+    cf = capacity_factor(ws)
 
-    #Calculate the rolling daily mean
-    vprime_rolling = vprime.rolling(dim={"time":24},min_periods=12,center=True).mean().chunk({
-        "lat":vprime.chunksizes["lat"][0],
-        "lon":vprime.chunksizes["lon"][0]})    
+    #Group the data by time and calculate the mean for each hour of the day
+    hourly = xr.Dataset(
+        {"vprime":vprime.groupby("time.hour").mean(),
+        "cf":cf.groupby("time.hour").mean()})
     
-    #Calculate the hourly perturbation from the rolling daily mean
-    vprime_pert = vprime - vprime_rolling
-
-    #Calculate the mean hourly perturbation for each hour of the day
-    hourly_pert = vprime_pert.groupby("time.hour").mean()
-
-    # Convert to a DataSet
-    hourly_pert = xr.Dataset({"vprime_pert":hourly_pert})
-
     # Save the result to a zarr file
-    encoding = {var: {"zlib":False,"least_significant_digit":3, "dtype":np.float32} for var in hourly_pert.data_vars}
-    output_path = "/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_perturbation_"+\
+    encoding = {var: {"zlib":False,"least_significant_digit":3, "dtype":np.float32} for var in hourly.data_vars}
+    output_path = "/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_"+\
         u_var+"_"+v_var+"_"+\
         pd.to_datetime(t1).strftime("%Y%m%d%H%M")+"_"+\
         (pd.to_datetime(t2).strftime("%Y%m%d%H%M"))
@@ -86,8 +80,40 @@ if __name__ == "__main__":
         pass
     else:
         os.makedirs(os.path.dirname(output_path))
-    hourly_pert.to_netcdf(output_path+".nc", encoding=encoding, mode="w")
-    #hourly_pert.to_zarr(output_path+".zarr", mode="w")
+    hourly.to_netcdf(output_path+".nc", encoding=encoding, mode="w")    
+
+    # #Calculate the rolling daily mean
+    # vprime_rolling = vprime.rolling(dim={"time":24},min_periods=12,center=True).mean().chunk({
+    #     "lat":vprime.chunksizes["lat"][0],
+    #     "lon":vprime.chunksizes["lon"][0]})    
+    # cf_rolling = cf.rolling(dim={"time":24},min_periods=12,center=True).mean().chunk({
+    #     "lat":cf.chunksizes["lat"][0],
+    #     "lon":cf.chunksizes["lon"][0]})
+    
+    # #Calculate the hourly perturbation from the rolling daily mean
+    # vprime_pert = vprime - vprime_rolling
+    # cf_pert = cf - cf_rolling
+
+    # #Calculate the mean hourly perturbation for each hour of the day
+    # hourly_pert = vprime_pert.groupby("time.hour").mean()
+    # cf_hourly_pert = cf_pert.groupby("time.hour").mean()
+
+    # # Convert to a DataSet
+    # hourly_pert = xr.Dataset(
+    #     {"vprime_pert":hourly_pert,
+    #     "cf_pert":cf_hourly_pert})
+
+    # # Save the result to a zarr file
+    # encoding = {var: {"zlib":False,"least_significant_digit":3, "dtype":np.float32} for var in hourly_pert.data_vars}
+    # output_path = "/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_perturbation_"+\
+    #     u_var+"_"+v_var+"_"+\
+    #     pd.to_datetime(t1).strftime("%Y%m%d%H%M")+"_"+\
+    #     (pd.to_datetime(t2).strftime("%Y%m%d%H%M"))
+    # if os.path.isdir(os.path.dirname(output_path)):
+    #     pass
+    # else:
+    #     os.makedirs(os.path.dirname(output_path))
+    # hourly_pert.to_netcdf(output_path+".nc", encoding=encoding, mode="w")
 
     client.close()
     

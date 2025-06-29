@@ -2,7 +2,7 @@
 
 #PBS -P ng72 
 #PBS -q normal
-#PBS -l walltime=04:00:00,mem=90GB 
+#PBS -l walltime=12:00:00,mem=90GB 
 #PBS -l ncpus=48
 #PBS -l jobfs=32gb
 #PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_hourly_pert.o 
@@ -18,8 +18,8 @@ module load gadi_jupyterlab/23.02
 jupyter.ini.sh -D
 
 #Set the start and end dates, and the current date as the start date
-start_date="2000-01-01"
-end_date="2022-12-31"
+start_date="2020-01-01"
+end_date="2023-12-31"
 current_date="$start_date 00:00:00"
 
 #Set an optional interval for the time range
@@ -46,7 +46,7 @@ while [[ "$current_date" < "$end_date" ]]; do
         new_month=1
     fi
 
-    python /home/548/ab4502/working/sea_breeze_analysis/barra_c/hourly_perturbation_composite.py "$start_time" "$end_time" --u_var uas --v_var vas
+    python /home/548/ab4502/working/sea_breeze_analysis/barra_c/hourly_perturbation_composite.py "$start_time" "$end_time" --u_var ua100m --v_var va100m
 
     #If we are into the next month, advance to the first of the next month
     #Otherwise, advance by the specified interval
