@@ -82,38 +82,38 @@ if __name__ == "__main__":
         os.makedirs(os.path.dirname(output_path))
     hourly.to_netcdf(output_path+".nc", encoding=encoding, mode="w")    
 
-    # #Calculate the rolling daily mean
-    # vprime_rolling = vprime.rolling(dim={"time":24},min_periods=12,center=True).mean().chunk({
-    #     "lat":vprime.chunksizes["lat"][0],
-    #     "lon":vprime.chunksizes["lon"][0]})    
-    # cf_rolling = cf.rolling(dim={"time":24},min_periods=12,center=True).mean().chunk({
-    #     "lat":cf.chunksizes["lat"][0],
-    #     "lon":cf.chunksizes["lon"][0]})
+    #Calculate the rolling daily mean
+    vprime_rolling = vprime.rolling(dim={"time":24},min_periods=12,center=True).mean().chunk({
+        "lat":vprime.chunksizes["lat"][0],
+        "lon":vprime.chunksizes["lon"][0]})    
+    cf_rolling = cf.rolling(dim={"time":24},min_periods=12,center=True).mean().chunk({
+        "lat":cf.chunksizes["lat"][0],
+        "lon":cf.chunksizes["lon"][0]})
     
-    # #Calculate the hourly perturbation from the rolling daily mean
-    # vprime_pert = vprime - vprime_rolling
-    # cf_pert = cf - cf_rolling
+    #Calculate the hourly perturbation from the rolling daily mean
+    vprime_pert = vprime - vprime_rolling
+    cf_pert = cf - cf_rolling
 
-    # #Calculate the mean hourly perturbation for each hour of the day
-    # hourly_pert = vprime_pert.groupby("time.hour").mean()
-    # cf_hourly_pert = cf_pert.groupby("time.hour").mean()
+    #Calculate the mean hourly perturbation for each hour of the day
+    hourly_pert = vprime_pert.groupby("time.hour").mean()
+    cf_hourly_pert = cf_pert.groupby("time.hour").mean()
 
-    # # Convert to a DataSet
-    # hourly_pert = xr.Dataset(
-    #     {"vprime_pert":hourly_pert,
-    #     "cf_pert":cf_hourly_pert})
+    # Convert to a DataSet
+    hourly_pert = xr.Dataset(
+        {"vprime_pert":hourly_pert,
+        "cf_pert":cf_hourly_pert})
 
-    # # Save the result to a zarr file
-    # encoding = {var: {"zlib":False,"least_significant_digit":3, "dtype":np.float32} for var in hourly_pert.data_vars}
-    # output_path = "/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_perturbation_"+\
-    #     u_var+"_"+v_var+"_"+\
-    #     pd.to_datetime(t1).strftime("%Y%m%d%H%M")+"_"+\
-    #     (pd.to_datetime(t2).strftime("%Y%m%d%H%M"))
-    # if os.path.isdir(os.path.dirname(output_path)):
-    #     pass
-    # else:
-    #     os.makedirs(os.path.dirname(output_path))
-    # hourly_pert.to_netcdf(output_path+".nc", encoding=encoding, mode="w")
+    # Save the result to a zarr file
+    encoding = {var: {"zlib":False,"least_significant_digit":3, "dtype":np.float32} for var in hourly_pert.data_vars}
+    output_path = "/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_perturbation_"+\
+        u_var+"_"+v_var+"_"+\
+        pd.to_datetime(t1).strftime("%Y%m%d%H%M")+"_"+\
+        (pd.to_datetime(t2).strftime("%Y%m%d%H%M"))
+    if os.path.isdir(os.path.dirname(output_path)):
+        pass
+    else:
+        os.makedirs(os.path.dirname(output_path))
+    hourly_pert.to_netcdf(output_path+".nc", encoding=encoding, mode="w")
 
     client.close()
     

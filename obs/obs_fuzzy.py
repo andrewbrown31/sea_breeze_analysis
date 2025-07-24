@@ -28,17 +28,17 @@ if __name__ == "__main__":
             #Load station data for chosen period
             stn_obs = load_obs.load_half_hourly_stn_obs(
                 state,slice(t1_list[i],t2_list[i])
-            )[["u","v","temp","hus","lati","long","name","bmid","wmid"]]
+            )[["u","v","temp","hus","latitude","longitude","name"]]
 
             #Assign coordinates to the data
-            stn_obs = stn_obs.assign_coords({"lati":stn_obs.lati,"long":stn_obs.long,"bmid":stn_obs.bmid})
+            stn_obs = stn_obs.assign_coords({"latitude":stn_obs.latitude,"longitude":stn_obs.longitude})
 
             #Slice to the domain
             stn_obs = stn_obs.sel(station=
-                (stn_obs.lati>=lat_slice.start) &\
-                (stn_obs.lati<=lat_slice.stop) &\
-                (stn_obs.long>=lon_slice.start) &\
-                (stn_obs.long<=lon_slice.stop))
+                (stn_obs.latitude>=lat_slice.start) &\
+                (stn_obs.latitude<=lat_slice.stop) &\
+                (stn_obs.longitude>=lon_slice.start) &\
+                (stn_obs.longitude<=lon_slice.stop))
 
             #Add to the list
             stn_obs_list.append(stn_obs.sel(time=stn_obs.time.dt.minute==0))
@@ -54,7 +54,7 @@ if __name__ == "__main__":
             lon_slice=lon_slice,
             path_to_load="/g/data/ng72/ab4502/coastline_data/aus2200.nc")
         stn_obs["angles"] = angle_ds["angle_interp"].sel(
-            xr.Dataset({"lat":stn_obs.lati,"lon":stn_obs.long}),method="nearest"
+            xr.Dataset({"lat":stn_obs.latitude,"lon":stn_obs.longitude}),method="nearest"
             )
 
         # Calculate the hourly change in temperature, humidity and wind
