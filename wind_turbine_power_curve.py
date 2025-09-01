@@ -221,3 +221,55 @@ def capacity_factor(ws, Pnom=5700, D=163, Vcutin=3, Vcutoff=25):
     cf = xr.where(ws >= Vcutoff, 0, cf)  # Set capacity factor to 0 above cut-off speed
 
     return cf
+
+def iec_class3(ws):
+
+    """
+    Apply the IEC Class 3 wind turbine power curve to the wind speeds.
+    
+    This is a generic power curve as used by the global wind atlas (https://journals.ametsoc.org/view/journals/bams/104/8/BAMS-D-21-0075.1.xml)
+
+    The power curve is based on the Vestas V136-3.45 MW turbine with a cut in at 3 m/s and a cut off at 22.5 m/s.
+
+    Power curve data is from here: https://en.wind-turbine-models.com/turbines/1282-vestas-v136-3.45#powercurve with linear interpolation between data points.
+
+    To apply this to a chunked xarray dataarray, ws, use xr.apply_ufunc(iec_class3,ws,dask="parallelized")
+
+    """
+
+    x = np.arange(3,23,0.5)
+    generic_curve = np.array([34.5,113.3,211.8,329.9,472.6,645,850.7,1095,1377,1699,2058,2450.7,2854,3193,3414.6,3450,3450,
+                    3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,
+                    3450,3450]) 
+
+    interp = np.interp(ws,x,generic_curve)
+    interp[ws<3]=0
+    interp[ws>=22.5]=0
+
+    return interp
+
+def iec_class2(ws):
+
+    """
+    Apply the IEC Class 2 wind turbine power curve to the wind speeds.
+    
+    This is a generic power curve as used by the global wind atlas (https://journals.ametsoc.org/view/journals/bams/104/8/BAMS-D-21-0075.1.xml)
+
+    The power curve is based on the Vestas V126-3.45 MW turbine with a cut in at 3 m/s and a cut off at 22.5 m/s.
+
+    Power curve data is from here: https://en.wind-turbine-models.com/turbines/1249-vestas-v126-3.45 with linear interpolation between data points.
+
+    To apply this to a chunked xarray dataarray, ws, use xr.apply_ufunc(iec_class2,ws,dask="parallelized")
+
+    """
+
+    x = np.arange(3,23,0.5)
+    generic_curve = np.array([35,101,184,283,404,550,725,932,1172,1446,1760,2104,2482,2865,3187,3366,3433,
+                    3448,3448,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,3450,
+                    3450,3450]) 
+
+    interp = np.interp(ws,x,generic_curve)
+    interp[ws<3]=0
+    interp[ws>=22.5]=0
+
+    return interp

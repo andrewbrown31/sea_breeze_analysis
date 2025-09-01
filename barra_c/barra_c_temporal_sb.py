@@ -32,10 +32,7 @@ if __name__ == "__main__":
     client.register_plugin(UploadDirectory(
         "/home/548/ab4502/working/sea_breeze")
         )
-    #client.upload_file("sea_breeze_funcs.py")
-    #client.upload_file("load_model_data.py")
     from sea_breeze import load_model_data, sea_breeze_funcs
-    #client = Client()
 
     #Set the domain bounds
     lat_slice=slice(args.lat1,args.lat2)
@@ -124,8 +121,8 @@ if __name__ == "__main__":
         uas,
         vas,
         angle_ds["angle_interp"],
-        lat_chunk=100,
-        lon_chunk=100
+        spatial_dims=["lat","lon"],
+        spatial_chunks=[100,100]
     )    
 
     #Setup out paths
