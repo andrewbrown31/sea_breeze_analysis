@@ -91,8 +91,8 @@ if __name__ == "__main__":
         era5_uas,
         era5_vas,
         angle_ds["angle_interp"],
-        lat_chunk=1000,
-        lon_chunk=1000
+        spatial_dims=["lat","lon"],
+        spatial_chunks=[1000,1000]
     )    
 
     #Setup out paths

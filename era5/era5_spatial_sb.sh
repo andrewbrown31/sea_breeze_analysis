@@ -14,9 +14,9 @@ module use /g/data/hh5/public/modules
 module load conda/analysis3
 module load dask-optimiser
 
-python /home/548/ab4502/working/sea_breeze/era5/era5_spatial_sb.py "2013-01-01 00:00" "2013-01-31 23:00"
-python /home/548/ab4502/working/sea_breeze/era5/era5_spatial_sb.py "2013-02-01 00:00" "2013-02-28 23:00"
-python /home/548/ab4502/working/sea_breeze/era5/era5_spatial_sb.py "2016-01-01 00:00" "2016-01-31 23:00"
-python /home/548/ab4502/working/sea_breeze/era5/era5_spatial_sb.py "2016-02-01 00:00" "2016-02-29 23:00"
-python /home/548/ab4502/working/sea_breeze/era5/era5_spatial_sb.py "2018-01-01 00:00" "2018-01-31 23:00"
-python /home/548/ab4502/working/sea_breeze/era5/era5_spatial_sb.py "2018-02-01 00:00" "2018-02-28 23:00"
+python /home/548/ab4502/working/sea_breeze_analysis/era5/era5_spatial_sb.py "2013-01-01 00:00" "2013-01-31 23:00"
+python /home/548/ab4502/working/sea_breeze_analysis/era5/era5_spatial_sb.py "2013-02-01 00:00" "2013-02-28 23:00"
+python /home/548/ab4502/working/sea_breeze_analysis/era5/era5_spatial_sb.py "2016-01-01 00:00" "2016-01-31 23:00"
+python /home/548/ab4502/working/sea_breeze_analysis/era5/era5_spatial_sb.py "2016-02-01 00:00" "2016-02-29 23:00"
+python /home/548/ab4502/working/sea_breeze_analysis/era5/era5_spatial_sb.py "2018-01-01 00:00" "2018-01-31 23:00"
+python /home/548/ab4502/working/sea_breeze_analysis/era5/era5_spatial_sb.py "2018-02-01 00:00" "2018-02-28 23:00"

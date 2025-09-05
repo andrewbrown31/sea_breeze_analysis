@@ -17,9 +17,9 @@ module use /g/data/dk92/apps/Modules/modulefiles
 module load gadi_jupyterlab/23.02
 jupyter.ini.sh -D
 
-python /home/548/ab4502/working/sea_breeze/aus2200/aus2200_temporal_sb.py "2013-01-01 00:00" "2013-01-31 23:00" --model aus2200_smooth_s4 --exp_id "mjo-neutral2013" --smooth --sigma 4
-python /home/548/ab4502/working/sea_breeze/aus2200/aus2200_temporal_sb.py "2013-02-01 00:00" "2013-02-28 23:00" --model aus2200_smooth_s4 --exp_id "mjo-neutral2013" --smooth --sigma 4
-python /home/548/ab4502/working/sea_breeze/aus2200/aus2200_temporal_sb.py "2016-01-01 00:00" "2016-01-31 23:00" --model aus2200_smooth_s4 --exp_id "mjo-elnino2016" --smooth --sigma 4
-python /home/548/ab4502/working/sea_breeze/aus2200/aus2200_temporal_sb.py "2016-02-01 00:00" "2016-02-29 23:00" --model aus2200_smooth_s4 --exp_id "mjo-elnino2016" --smooth --sigma 4
-python /home/548/ab4502/working/sea_breeze/aus2200/aus2200_temporal_sb.py "2018-01-01 00:00" "2018-01-31 23:00" --model aus2200_smooth_s4 --exp_id "mjo-lanina2018" --smooth --sigma 4
-python /home/548/ab4502/working/sea_breeze/aus2200/aus2200_temporal_sb.py "2018-02-01 00:00" "2018-02-28 23:00" --model aus2200_smooth_s4 --exp_id "mjo-lanina2018" --smooth --sigma 4
+python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_temporal_sb.py "2013-01-01 00:00" "2013-01-31 23:00" --model aus2200_smooth_s4 --exp_id "mjo-neutral2013" --smooth --sigma 4
+python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_temporal_sb.py "2013-02-01 00:00" "2013-02-28 23:00" --model aus2200_smooth_s4 --exp_id "mjo-neutral2013" --smooth --sigma 4
+python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_temporal_sb.py "2016-01-01 00:00" "2016-01-31 23:00" --model aus2200_smooth_s4 --exp_id "mjo-elnino2016" --smooth --sigma 4
+python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_temporal_sb.py "2016-02-01 00:00" "2016-02-29 23:00" --model aus2200_smooth_s4 --exp_id "mjo-elnino2016" --smooth --sigma 4
+python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_temporal_sb.py "2018-01-01 00:00" "2018-01-31 23:00" --model aus2200_smooth_s4 --exp_id "mjo-lanina2018" --smooth --sigma 4
+python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_temporal_sb.py "2018-02-01 00:00" "2018-02-28 23:00" --model aus2200_smooth_s4 --exp_id "mjo-lanina2018" --smooth --sigma 4

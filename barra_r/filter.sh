@@ -65,10 +65,10 @@ while [[ "$current_date" < "$end_date" ]]; do
             #python /home/548/ab4502/working/sea_breeze/filter.py --model barra_r --filter_name no_hourly_change --field_name Fc --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value #$fc_threshold
 
             #F
-            # python /home/548/ab4502/working/sea_breeze/filter_test.py --model barra_r --filter_name no_hourly_change --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold
+            python /home/548/ab4502/working/sea_breeze/filter.py --model barra_r --filter_name no_hourly_change_v2 --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold
 
             #Fuzzy
-            python /home/548/ab4502/working/sea_breeze/filter_test.py --model barra_r --filter_name no_hourly_change --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold
+            python /home/548/ab4502/working/sea_breeze/filter.py --model barra_r --filter_name no_hourly_change_v2 --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold
 
         fi
     fi

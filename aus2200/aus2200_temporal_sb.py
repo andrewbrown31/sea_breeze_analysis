@@ -150,8 +150,8 @@ if __name__ == "__main__":
         aus2200_uas,
         aus2200_vas,
         angle_ds["angle_interp"],
-        lat_chunk=200,
-        lon_chunk=200
+        spatial_dims=["lat","lon"],
+        spatial_chunks=[200,200]
     )    
     print("INFO: Computing hourly changes...")
     progress(F_hourly)
