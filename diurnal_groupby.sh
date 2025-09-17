@@ -2,7 +2,7 @@
 
 #PBS -P ng72
 #PBS -q normal
-#PBS -l walltime=06:00:00,mem=190GB 
+#PBS -l walltime=12:00:00,mem=190GB 
 #PBS -l ncpus=48
 #PBS -l jobfs=32gb
 #PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/diurnal_groupby.o 

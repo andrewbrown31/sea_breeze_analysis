@@ -2,7 +2,7 @@
 
 #PBS -P ng72 
 #PBS -q hugemem
-#PBS -l walltime=24:00:00,mem=512GB 
+#PBS -l walltime=06:00:00,mem=512GB 
 #PBS -l ncpus=48
 #PBS -l jobfs=32gb
 #PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/aus2200_smooth_s6_filter.o 
@@ -80,13 +80,13 @@ while [[ "$current_date" < "$end_date" ]]; do
             # python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s4 --filter_name no_hourly_change --field_name Fc --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fc_threshold --exp_id $exp_id
 
             #F
-            #python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s6 --filter_name smooth2 --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold --exp_id $exp_id
+            python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s6 --filter_name smooth2 --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold --exp_id $exp_id
 
             #Fuzzy
-            # python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s6 --filter_name smooth2 --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold --exp_id $exp_id
+            #python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s6 --filter_name smooth2 --field_name fuzzy --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $fuzzy_threshold --exp_id $exp_id
 
             #sbi
-            python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s6 --filter_name smooth2 --field_name sbi --t1 "$sbi_start_time" --t2 "$end_time" --threshold fixed --threshold_value $sbi_threshold --exp_id $exp_id
+            #python /home/548/ab4502/working/sea_breeze/filter.py --model aus2200_smooth_s6 --filter_name smooth2 --field_name sbi --t1 "$sbi_start_time" --t2 "$end_time" --threshold fixed --threshold_value $sbi_threshold --exp_id $exp_id
 
         fi
     fi

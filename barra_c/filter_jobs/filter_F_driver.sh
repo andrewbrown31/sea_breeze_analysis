@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in $(seq 1979 1 1999); do
+for i in $(seq 2024 1 2024); do
 
     let j=i+1
 
