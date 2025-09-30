@@ -1,6 +1,6 @@
 # Sea breeze analysis
 
-A collection of scripts and notebooks for calculating and analysing sea breeze objects from model data. Sea breeze objects are defined using code from the [sea_breeze](https://github.com/andrewbrown31/sea_breeze) repository.
+A collection of scripts and notebooks for calculating and analysing sea breeze objects from model data. Sea breeze objects are defined using code from the [sea_breeze](https://github.com/andrewbrown31/sea_breeze) repository. This repository includes notebooks for [generating figures for Brown et al. (submitted).](#figures). 
 
 ## Model preprocessing
 
@@ -18,3 +18,22 @@ First, the thresholds for identifying sea breeze objects from the diagnostics ar
 
 * [Diurnal compositing of sea breeze objects and wind](diurnal_groupby.py)
 * [Analysis notebooks](/analysis_notebooks/)
+
+## Figures 
+
+For Brown et al. (submitted)
+
+* [Figure 2](/analysis_notebooks/coastline_notepad.ipynb)
+* [Figure 3--8](/analysis_notebooks/case_studies.ipynb)
+* [Figure 9--11](/analysis_notebooks/spatial_counts.ipynb)
+* [Figure 12](/analysis_notebooks/surface_heating.ipynb)
+* [Figure 13](/analysis_notebooks/diurnal_hovmoller_plots.ipynb)
+
+For Brown et al. (submitted) Supplementary Material
+* [Figure 1](/analysis_notebooks/coastline_notepad.ipynb)
+* [Figure 2 and 3](/analysis_notebooks/obs_comparison.ipynb)
+* [Figure 4](/analysis_notebooks/diurnal_hovmoller_plots.ipynb)
+
+## References
+
+Brown, A., Vincent, C., and Short, E. (submitted): Identiyfing sea breezes from atmospheric model output (sea_breeze v1.1).

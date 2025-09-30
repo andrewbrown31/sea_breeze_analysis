@@ -42,6 +42,9 @@ while [[ "$current_date" < "$end_date" ]]; do
     #Create a datetime object for the current date
     start_time=$(date -d "$current_date" +"%Y-%m-%d %H:%M")
 
+    #Adjust this back one hour for calculating F_hourly (as it is a time difference)
+    start_time_f_hourly=$(date -ud "$start_time UTC - 1 hour" +"%Y-%m-%d %H:%M")
+
     #Calculate the current month and next month
     start_month=$(date -d "$current_date" +"%Y-%m-01")
     next_month=$(date -d "$start_month +1 month" +"%Y-%m-01")
@@ -63,7 +66,7 @@ while [[ "$current_date" < "$end_date" ]]; do
     python /home/548/ab4502/working/sea_breeze_analysis/barra_c/barra_c_spatial_sb.py "$start_time" "$end_time" --model barra_c_smooth_s2 --smooth --sigma 2 --lat1 "$lat1" --lat2 "$lat2" --lon1 "$lon1" --lon2 "$lon2"
 
     #Calculate the F_hourly diagnostic field for the specified time range
-    python /home/548/ab4502/working/sea_breeze_analysis/barra_c/barra_c_temporal_sb.py "$start_time" "$end_time" --model barra_c_smooth_s2 --smooth --sigma 2 --lat1 "$lat1" --lat2 "$lat2" --lon1 "$lon1" --lon2 "$lon2"
+    python /home/548/ab4502/working/sea_breeze_analysis/barra_c/barra_c_temporal_sb.py "$start_time_f_hourly" "$end_time" --model barra_c_smooth_s2 --smooth --sigma 2 --lat1 "$lat1" --lat2 "$lat2" --lon1 "$lon1" --lon2 "$lon2"
 
     #Run the filter script for each field with the specified parameters
     python /home/548/ab4502/working/sea_breeze/filter.py --model barra_c_smooth_s2 --filter_name standard --field_name F --t1 "$start_time" --t2 "$end_time" --threshold fixed --threshold_value $f_threshold --lat1 "$lat1" --lat2 "$lat2" --lon1 "$lon1" --lon2 "$lon2" --humidity_change_filter 
@@ -72,7 +75,7 @@ while [[ "$current_date" < "$end_date" ]]; do
     rm -rf /g/data/ng72/ab4502/sea_breeze_detection/barra_c_smooth_s2/F_$(date -d "$start_time" +"%Y%m%d%H%M")_$(date -d "$end_time" +"%Y%m%d%H%M").zarr
 
     #Remove the F_hourly field for the specified time range
-    rm -rf /g/data/ng72/ab4502/sea_breeze_detection/barra_c_smooth_s2/F_hourly_$(date -d "$start_time" +"%Y%m%d%H%M")_$(date -d "$end_time" +"%Y%m%d%H%M").zarr
+    rm -rf /g/data/ng72/ab4502/sea_breeze_detection/barra_c_smooth_s2/F_hourly_$(date -d "$start_time_f_hourly" +"%Y%m%d%H%M")_$(date -d "$end_time" +"%Y%m%d%H%M").zarr
 
     #If we are into the next month, advance to the first of the next month
     #Otherwise, advance by the specified interval
