@@ -7,7 +7,7 @@
 #PBS -l jobfs=32gb
 #PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_sb_composite_bunbury.o 
 #PBS -e /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_sb_composite_bunbury.e
-#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92+gdata/ob53
+#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92+gdata/ob53+scratch/gb02
 
 #Set up conda/shell environments 
 module use /g/data/xp65/public/modules
@@ -46,7 +46,7 @@ while [[ "$current_date" < "$end_date" ]]; do
         new_month=1
     fi
 
-    python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/sea_breeze_composite.py "$start_time" "$end_time" --region bunbury --lat_start "-42" --lat_end "-27" --lon_start 108 --lon_end 125
+    #python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/sea_breeze_composite.py "$start_time" "$end_time" --region bunbury --lat_start "-42" --lat_end "-27" --lon_start 108 --lon_end 125
 
     #If we are into the next month, advance to the first of the next month
     #Otherwise, advance by the specified interval

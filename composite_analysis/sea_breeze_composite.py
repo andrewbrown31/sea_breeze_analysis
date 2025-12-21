@@ -6,7 +6,7 @@ import argparse
 import xarray as xr
 import datetime as dt
 import numpy as np
-from sea_breeze_analysis.wind_turbine_power_curve import capacity_factor, iec_class2
+from sea_breeze_analysis.wind_turbine_power_curve import capacity_factor, iea_ref_10mw
 
 if __name__ == "__main__":
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         lon_slice,
         chunks={}).chunk({"lat":100,"lon":100,"time":-1}).drop_vars("height")         
     ws = np.sqrt(u**2 + v**2)
-    cf = (xr.apply_ufunc(iec_class2,ws,dask="parallelized") / 3450.)
+    cf = (xr.apply_ufunc(iea_ref_10mw,ws,dask="parallelized") / 10638.301)
     
     if region in ["bunbury"]:
         #For western australia, convert to AWST (UTC+8)
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     cf["time"] = pd.to_datetime(cf["time"]) + dt.timedelta(hours=h)
     tas["time"] = pd.to_datetime(tas["time"]) + dt.timedelta(hours=h)
 
-    # Load the sea breeze days (created by sea_breeze_analysis/analysis_notebooks/diurnal_rez.ipynb)
+    # Load the sea breeze days (created by sea_breeze_analysis/composite_analysis/sb_day_ts.py)
     sb_days = pd.read_csv("/g/data/ng72/ab4502/sea_breeze_detection/barra_c_smooth_s2/sb_days/"+region+".csv",index_col=0,parse_dates=True)
     sb_days = sb_days.loc[t1:t2]
 
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         ).mean(("lat","lon")).to_dataframe(name="ocean_tas").drop(columns=["height","crs","region","abbrevs","names"])
     t1_str = pd.to_datetime(t1).strftime("%Y%m%d%H%M")
     t2_str = pd.to_datetime(t2).strftime("%Y%m%d%H%M")
-    tas_df = pd.concat([land_tas,ocean_tas],axis=1).to_csv(f"/scratch/ng72/ab4502/land_sea_temp_diff/land_ocean_tas_{region}_{t1_str}_{t2_str}.csv")
+    tas_df = pd.concat([land_tas,ocean_tas],axis=1).to_csv(f"/scratch/gb02/ab4502/land_sea_temp_diff/land_ocean_tas_{region}_{t1_str}_{t2_str}.csv")
 
     # Convert the sea breeze days to datetime
     sb_times = pd.to_datetime(sb_days[sb_days.sb==1].index)
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 
         # Save the result to a nc file
         encoding = {var: {"zlib":False,"least_significant_digit":3, "dtype":np.float32} for var in nonsb_ds.data_vars}
-        output_path_nonsb = "/scratch/ng72/ab4502/hourly_composites/barra_c/barra_c_nonsb_"+\
+        output_path_nonsb = "/scratch/gb02/ab4502/hourly_composites/barra_c/barra_c_nonsb_"+\
             region+"_"+\
             pd.to_datetime(t1).strftime("%Y%m%d%H%M")+"_"+\
             (pd.to_datetime(t2).strftime("%Y%m%d%H%M"))
@@ -173,7 +173,7 @@ if __name__ == "__main__":
 
         # Save the result to a nc file
         encoding = {var: {"zlib":False,"least_significant_digit":3, "dtype":np.float32} for var in sb_ds.data_vars}
-        output_path_sb = "/scratch/ng72/ab4502/hourly_composites/barra_c/barra_c_sb_"+\
+        output_path_sb = "/scratch/gb02/ab4502/hourly_composites/barra_c/barra_c_sb_"+\
             region+"_"+\
             pd.to_datetime(t1).strftime("%Y%m%d%H%M")+"_"+\
             (pd.to_datetime(t2).strftime("%Y%m%d%H%M"))

@@ -10,9 +10,12 @@ Created on Tue May 16 10:09:20 2023
   journal={Renewable Energy},
   year={2020}
 }
+
+@Modified by Andrew Brown, 2025
 """
 
 import numpy as np
+from scipy.interpolate import CubicSpline
 
 #%% Parametric model of the power coefficient C𝑝 (λ, β)
 def CpLambdaModels(Model,TSR,Beta=[]):
@@ -273,3 +276,29 @@ def iec_class2(ws):
     interp[ws>=22.5]=0
 
     return interp
+
+
+def iea_ref_10mw(ws):
+
+    """
+    Apply the IEA 10 MW reference wind turbine power curve to the wind speeds with linear interpolation between data points.
+    
+    See https://nrel.github.io/turbine-models/IEA_10MW_198_RWT.html
+
+    To apply this to a chunked xarray dataarray, ws, use xr.apply_ufunc(iec_class2,ws,dask="parallelized")
+
+    """
+
+    x = [3, 4, 5, 6, 7, 8, 9, 9.5, 10, 10.5, 11, 11.5, 12, 13, 14, 15, 16, 18, 20, 25]
+    generic_curve = np.array([37.874, 440.49, 1074.369, 1973.429, 3152.143, 4723.686, 6734.924, 
+    7863.971, 9057.796, 10309.687, 10638.3, 10638.3, 10638.3, 10638.3, 10638.3, 10638.3, 10638.3, 10638.3, 10638.3, 10638.301])
+
+    #interp = np.interp(ws,x,generic_curve)
+
+    cs = CubicSpline(x, generic_curve)
+    interp = cs(ws)
+
+    interp[ws<3]=0
+    interp[ws>=22.5]=0
+
+    return interp    

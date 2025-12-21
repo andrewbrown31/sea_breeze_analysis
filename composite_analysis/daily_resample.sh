@@ -18,5 +18,5 @@ module load gadi_jupyterlab/23.02
 jupyter.ini.sh -D
 
 #Combine the output files into seasonal averages and delete the monthly files
-#python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/daily_resample.py
+python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/daily_resample.py
 python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/sb_day_ts.py

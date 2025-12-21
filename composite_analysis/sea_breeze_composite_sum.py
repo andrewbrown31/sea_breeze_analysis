@@ -31,14 +31,14 @@ if __name__ == "__main__":
     region = args.region
 
     #Load monthly files for sea breeze and non-sea breeze composites, created by the sea_breeze_composite.sh script
-    sb_files = np.sort(glob.glob("/scratch/ng72/ab4502/hourly_composites/barra_c/barra_c_sb_"+region+"_????????????_????????????.nc"))
+    sb_files = np.sort(glob.glob("/scratch/gb02/ab4502/hourly_composites/barra_c/barra_c_sb_"+region+"_????????????_????????????.nc"))
     file_dates = [pd.to_datetime(f.split("/")[-1].split("_")[-2]) for f in sb_files]
     sb = xr.open_mfdataset(sb_files,
                         combine="nested",
                         concat_dim=xr.DataArray(np.array(file_dates),dims="month"),
                         preprocess=preprocess_sb)
 
-    nonsb_files = np.sort(glob.glob("/scratch/ng72/ab4502/hourly_composites/barra_c/barra_c_nonsb_"+region+"_????????????_????????????.nc"))
+    nonsb_files = np.sort(glob.glob("/scratch/gb02/ab4502/hourly_composites/barra_c/barra_c_nonsb_"+region+"_????????????_????????????.nc"))
     file_dates = [pd.to_datetime(f.split("/")[-1].split("_")[-2]) for f in nonsb_files]
     nonsb = xr.open_mfdataset(nonsb_files,
                         combine="nested",
@@ -74,3 +74,20 @@ if __name__ == "__main__":
         os.remove(f)
 
     #Concatenate the .csv land-sea temperature files for the region, and delete the monthly files. Potentially resample to daily (either mean diff, max diff, or integrated positive diff)
+
+    def load_land_sea_temp(region):
+
+        files = np.sort(glob.glob("/scratch/gb02/ab4502/land_sea_temp_diff/land_ocean_tas_"+region+"*.csv"))
+
+        land_sea_diff = pd.concat([pd.read_csv(f) for f in files],axis=0)
+        land_sea_diff["time"] = pd.to_datetime(land_sea_diff["time"])
+        land_sea_diff = land_sea_diff.set_index("time")
+
+        daily_max = (land_sea_diff["land_tas"] - land_sea_diff["ocean_tas"]).groupby(land_sea_diff.index.date).max()
+
+        return daily_max    
+
+    land_sea_diff = load_land_sea_temp(region)
+    land_sea_diff.to_csv("/g/data/ng72/ab4502/coastline_data/land_sea_temp_diff_barra_c_rez/"+region+".csv")
+
+    #The monthly files are kept on scratch in case we want to resample them differently (e.g. taking the mean difference, or the integrated positive difference)

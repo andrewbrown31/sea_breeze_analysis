@@ -10,7 +10,7 @@ import datetime as dt
 import os
 import argparse
 import skimage
-from sea_breeze_analysis.wind_turbine_power_curve import capacity_factor, iec_class2
+from sea_breeze_analysis.wind_turbine_power_curve import capacity_factor, iec_class2, iea_ref_10mw
 from sea_breeze import load_model_data, sea_breeze_funcs, utils
 
 def transform_from_latlon(lat, lon):
@@ -77,17 +77,23 @@ if __name__ == "__main__":
         chunks={"time":1,"lat":-1,"lon":-1})    
 
     #Calculate the wind speed, and the wind power capacity factor
-    ws = np.sqrt(u**2 + v**2)
+    ws = np.sqrt(u**2 + v**2).persist()
     print("Calculating capacity factor for times {} to {}".format(t1, t2))
-    cf = (xr.apply_ufunc(iec_class2,ws,dask="parallelized") / 3450.).persist()
+    cf = (xr.apply_ufunc(iea_ref_10mw,ws,dask="parallelized") / 10638.301)
     #cf_daily = cf.resample({"time":"1D"}).mean()
 
     #Load the REZ boundaries
-    rez=gpd.read_file("/g/data/ng72/ab4502/Indicative_REZ_boundaries_2024_GIS_data.kml")
+    #rez=gpd.read_file("/g/data/ng72/ab4502/Indicative_REZ_boundaries_2024_GIS_data.kml")
+
 
     #Shape into the xarray dataset of BARRA
-    shapes = [(shape, n) for n, shape in enumerate(rez.geometry)]
-    raster = rasterize(shapes,{"lat":ws.lat,"lon":ws.lon},fill=np.nan)
+    #shapes = [(shape, n) for n, shape in enumerate(rez.geometry)]
+    #raster = rasterize(shapes,{"lat":ws.lat,"lon":ws.lon},fill=np.nan)
+
+    shapes = xr.open_dataset("/g/data/ng72/ab4502/coastline_data/rez_coastal_shapes.nc").sel(
+        lat=cf.lat,
+        lon=cf.lon
+    )
 
     #TODO
     # - Decide on how we are averaging over the NEM. Avg over all at once, or by REZ? Or by state?
@@ -103,18 +109,34 @@ if __name__ == "__main__":
     #df = cf.drop_vars(["height","crs"]).groupby(raster).mean().to_dataframe(name="cf")
 
     #Calculate the mean capacity factor over all REZs
-    df = xr.where((~raster.isnull()),cf,np.nan).mean(("lat","lon")).drop_vars(["height","crs"]).to_dataframe(name="NEM")
+    #df = xr.where((~raster.isnull()),cf,np.nan).mean(("lat","lon")).drop_vars(["height","crs"]).to_dataframe(name="NEM")
 
     #Save the results to a CSV file
     #df.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_wind_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}_nem.csv", index=True)
 
-    #Calculate the mean capacity factor for each state and save to CSV
-    print("Calculating capacity factor for each state")
-    rez_states = np.array([n[0] for n in rez["Name"]])
-    for s in ["Q","N","V","S","T"]:
-        temp_df = xr.where(raster.isin(np.where(rez_states==s)),cf,np.nan).mean(("lat","lon")).drop_vars(["height","crs"]).to_dataframe(name=s)
-        df = pd.concat([df, temp_df], axis=1)
-        # Save the results to a CSV file for this time period and state
-    df.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_wind_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
+    #Calculate the mean capacity factor for each REZ and save to CSV
+    print("Calculating capacity factor for each REZ")
+    #rez_states = np.array([n[0] for n in rez["Name"]])
+
+    rez_id = [27,19,18,38,28,42,43,44]
+    rez_name = ["gipps","illawara","newcastle","sa","southern","tas","bunbury_near","bunbury_offshore"]
+
+    df_ws = pd.DataFrame()
+    for r,name in zip(rez_id, rez_name):
+        temp_df = xr.where(shapes["rez_mask"]==r,ws,np.nan).mean(("lat","lon")).drop_vars(
+            ["crs","region","abbrevs","names"]
+            ).to_dataframe(name=name)
+        df_ws = pd.concat([df_ws, temp_df], axis=1)
+        # Save the results to a CSV file for this time period and REZ
+    df_ws.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_ws_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
+
+    df_cf = pd.DataFrame()
+    for r,name in zip(rez_id, rez_name):
+        temp_df = xr.where(shapes["rez_mask"]==r,cf,np.nan).mean(("lat","lon")).drop_vars(
+            ["crs","region","abbrevs","names"]
+            ).to_dataframe(name=name)
+        df_cf = pd.concat([df_cf, temp_df], axis=1)
+        # Save the results to a CSV file for this time period and REZ
+    df_cf.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_cf_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
 
     client.close()

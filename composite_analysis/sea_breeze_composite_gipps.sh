@@ -7,7 +7,7 @@
 #PBS -l jobfs=32gb
 #PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_sb_composite_gipps.o 
 #PBS -e /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_sb_composite_gipps.e
-#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92+gdata/ob53
+#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92+gdata/ob53+scratch/gb02
 
 #Set up conda/shell environments 
 module use /g/data/xp65/public/modules

@@ -12,8 +12,8 @@ if __name__ == "__main__":
     base_path = "/g/data/ng72/ab4502/sea_breeze_detection/"
 
     #Load in the daily sea breeze occurrence datasets
-    sb_obj_aest = xr.open_dataset(f"{base_path}/{model}/filters/daily_filtered_{name}_{variable}_aest_19790101_20250101.zarr",chunks={})
-    sb_obj_awst = xr.open_dataset(f"{base_path}/{model}/filters/daily_filtered_{name}_{variable}_awst_19790101_20241231.zarr",chunks={})
+    sb_obj_aest = xr.open_dataset(f"{base_path}/{model}/filters/daily_filtered_{name}_{variable}_aest_19790101_20241231.zarr",chunks={},engine="zarr")
+    sb_obj_awst = xr.open_dataset(f"{base_path}/{model}/filters/daily_filtered_{name}_{variable}_awst_19790101_20241231.zarr",chunks={},engine="zarr")
 
     #Load in the dataset of coastal shapes to define daily sea breeze time series
     shapes = xr.open_dataset("/g/data/ng72/ab4502/coastline_data/rez_coastal_shapes.nc").sel(lat=sb_obj_aest.lat,lon=sb_obj_aest.lon)

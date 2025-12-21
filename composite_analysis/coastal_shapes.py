@@ -119,10 +119,15 @@ if __name__ == "__main__":
     },coords={"lat":angle_ds.lat,"lon":angle_ds.lon})
 
 
-    #Add Bunbury REZ to the rez mask 
+    #Add Bunbury REZs to the rez mask
     bunbury=gpd.read_file("/g/data/ng72/ab4502/coastline_data/OffshoreRenewable_Energy_Infrastructure_Regions_-7052837244166384748.kmz").iloc[[10,11]]
     bunbury_shapes = [(shape, n) for n, shape in enumerate(bunbury.geometry)]
     raster = rasterize(bunbury_shapes,{"lat":shapes.lat,"lon":shapes.lon},fill=np.nan)
-    shapes["rez_mask"] = xr.where(raster>=0,shapes.rez_mask.max()+1,shapes["rez_mask"])
+    shapes["rez_mask"] = xr.where(raster==0,shapes.rez_mask.max()+1,shapes["rez_mask"])
+    shapes["rez_mask"] = xr.where(raster==1,shapes.rez_mask.max()+1,shapes["rez_mask"])
+
+    #Remove the Gippsland REZ south of 39S and east of 147E (it is not really associated with a single coastline)
+    xx,yy=np.meshgrid(shapes.lon,shapes.lat)
+    shapes["rez_mask"] = xr.where((shapes.rez_mask==27) & (xx<=147) & (yy<-39), np.nan, shapes.rez_mask)
 
     shapes.to_netcdf("/g/data/ng72/ab4502/coastline_data/rez_coastal_shapes.nc")

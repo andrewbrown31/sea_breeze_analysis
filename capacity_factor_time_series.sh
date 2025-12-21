@@ -2,7 +2,7 @@
 
 #PBS -P ng72 
 #PBS -q normal
-#PBS -l walltime=12:00:00,mem=128GB 
+#PBS -l walltime=12:00:00,mem=190GB 
 #PBS -l ncpus=48
 #PBS -l jobfs=32gb
 #PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_cf.o 
@@ -18,7 +18,7 @@ module load gadi_jupyterlab/23.02
 jupyter.ini.sh -D
 
 #Set the start and end dates, and the current date as the start date
-start_date="1983-01-01"
+start_date="1997-01-01"
 end_date="2024-12-31"
 current_date="$start_date 00:00:00"
 
