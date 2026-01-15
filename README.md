@@ -1,6 +1,6 @@
 # Sea breeze analysis
 
-A collection of scripts and notebooks for calculating and analysing sea breeze objects from model data. Sea breeze objects are defined using code from the [sea_breeze](https://github.com/andrewbrown31/sea_breeze) repository. This repository includes notebooks for [generating figures for Brown et al. (submitted).](#figures). 
+A collection of scripts and notebooks for calculating and analysing sea breeze objects from model data. Sea breeze objects are defined using code from the [sea_breeze](https://github.com/andrewbrown31/sea_breeze) repository. This repository includes notebooks for [generating figures for Brown et al. (submitted) and Brown and Vincent (submitted)](#figures). 
 
 ## Model preprocessing
 
@@ -39,7 +39,8 @@ For Brown et al. (submitted): Identifying sea breezes from atmospheric model out
 * [Figure 13](/analysis_notebooks/diurnal_hovmoller_plots.ipynb)
 * [Figure S1](/analysis_notebooks/coastline_notepad.ipynb)
 * [Figure S2 and S3](/analysis_notebooks/obs_comparison.ipynb)
-* [Figure S4](/analysis_notebooks/diurnal_hovmoller_plots.ipynb)
+* [Figure S4](/analysis_notebooks/case_studies.ipynb)
+* [Figure S5 and S6](/analysis_notebooks/diurnal_hovmoller_plots.ipynb)
 
 For Brown and Vincent (submitted): The impact of sea breezes on offshore wind energy resources in Australia
 * [Figure 1-3](/analysis_notebooks/climo.ipynb)
