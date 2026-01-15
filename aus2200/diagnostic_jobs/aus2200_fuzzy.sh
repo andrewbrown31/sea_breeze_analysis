@@ -17,6 +17,6 @@ module use /g/data/dk92/apps/Modules/modulefiles
 module load gadi_jupyterlab/23.02
 jupyter.ini.sh -D
 
-#python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_fuzzy.py --model aus2200_smooth_s4
-python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_fuzzy.py --model aus2200_smooth_s2
-python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_fuzzy.py --model aus2200_smooth_s6
+python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_fuzzy.py --model aus2200_smooth_s4
+#python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_fuzzy.py --model aus2200_smooth_s2
+#python /home/548/ab4502/working/sea_breeze_analysis/aus2200/aus2200_fuzzy.py --model aus2200_smooth_s6

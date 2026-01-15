@@ -27,13 +27,44 @@ if __name__ == "__main__":
         hourly_change_path,engine="zarr"
         )
     
-    #Combine the fuzzy functions
-    fuzzy = sea_breeze_funcs.fuzzy_function_combine(
-        hourly_change_ds.wind_change,
-        hourly_change_ds.q_change,
-        hourly_change_ds.t_change,
-        combine_method="mean")    
+    # #Combine the fuzzy functions
+    # change_ls = [hourly_change_ds["wind_change"],hourly_change_ds["t_change"],hourly_change_ds["q_change"]]
+    # var_names = ["wind_change","t_change","q_change"]
+    # fuzzy = sea_breeze_funcs.fuzzy_function_combine(
+    #     change_ls,
+    #     var_names,
+    #     combine_method="mean")    
     
-    #Save
-    to_zarr = fuzzy.chunk({"time":744}).to_zarr(path + "sea_breeze_detection/"+model+"/fuzzy_201301010000_201802282300.zarr",compute=False,mode="w")
+    # #Save
+    # to_zarr = fuzzy.chunk({"time":744}).to_zarr(path + "sea_breeze_detection/"+model+"/fuzzy_v2_201301010000_201802282300.zarr",compute=False,mode="w")
+    # progress(to_zarr.persist())
+
+    #Leave out wind change
+    change_ls = [hourly_change_ds["t_change"],hourly_change_ds["q_change"]]
+    var_names = ["t_change","q_change"]
+    fuzzy = sea_breeze_funcs.fuzzy_function_combine(
+        change_ls,
+        var_names,
+        combine_method="mean")    
+    to_zarr = fuzzy.chunk({"time":744}).to_zarr(path + "sea_breeze_detection/"+model+"/fuzzy_no_wind_201301010000_201802282300.zarr",compute=False,mode="w")
+    progress(to_zarr.persist())
+
+    #Leave out q change
+    change_ls = [hourly_change_ds["wind_change"],hourly_change_ds["t_change"]]
+    var_names = ["wind_change","t_change"]
+    fuzzy = sea_breeze_funcs.fuzzy_function_combine(
+        change_ls,
+        var_names,
+        combine_method="mean")    
+    to_zarr = fuzzy.chunk({"time":744}).to_zarr(path + "sea_breeze_detection/"+model+"/fuzzy_no_q_201301010000_201802282300.zarr",compute=False,mode="w")
+    progress(to_zarr.persist())
+
+    #Leave out t change
+    change_ls = [hourly_change_ds["wind_change"],hourly_change_ds["q_change"]]
+    var_names = ["wind_change","q_change"]
+    fuzzy = sea_breeze_funcs.fuzzy_function_combine(
+        change_ls,
+        var_names,
+        combine_method="mean")    
+    to_zarr = fuzzy.chunk({"time":744}).to_zarr(path + "sea_breeze_detection/"+model+"/fuzzy_no_t_201301010000_201802282300.zarr",compute=False,mode="w")
     progress(to_zarr.persist())

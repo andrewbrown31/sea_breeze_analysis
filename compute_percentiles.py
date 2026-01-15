@@ -13,8 +13,9 @@ if __name__ == "__main__":
 
     # Set up the parameters
     #fields = ["F","Fc","sbi","fuzzy"]
-    fields = ["F","fuzzy","sbi"]
-    p_list = [95.0,97.5,99.0,99.5,99.9]
+    fields = ["fuzzy_no_wind","fuzzy_no_q","fuzzy_no_t"]
+    #p_list = [95.0,97.5,99.0,99.5,99.9]
+    p_list = [99.5]
     #models = ["era5","barra_r","barra_c_smooth_s2","aus2200_smooth_s4"]
     #models = ["aus2200_smooth_s2","aus2200_smooth_s4","aus2200_smooth_s6"]
     models = ["aus2200_smooth_s4"]
