@@ -11,11 +11,11 @@
 
 #Set up conda/shell environments 
 module use /g/data/xp65/public/modules
-module load conda/analysis3-24.07
+module load conda/analysis3-25.10
 
-module use /g/data/dk92/apps/Modules/modulefiles
-module load gadi_jupyterlab/23.02
-jupyter.ini.sh -D
+# module use /g/data/dk92/apps/Modules/modulefiles
+# module load gadi_jupyterlab/23.02
+# jupyter.ini.sh -D
 
 #Set the start and end dates, and the current date as the start date
 start_date="1979-01-01"

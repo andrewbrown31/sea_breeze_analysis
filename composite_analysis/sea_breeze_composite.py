@@ -11,7 +11,8 @@ from sea_breeze_analysis.wind_turbine_power_curve import capacity_factor, iea_re
 if __name__ == "__main__":
 
     # Set up the Dask client
-    client = Client(scheduler_file=os.environ["DASK_PBS_SCHEDULER"])
+    #client = Client(scheduler_file=os.environ["DASK_PBS_SCHEDULER"])
+    client = Client()
 
     # Argument parser for the script
     parser = argparse.ArgumentParser(

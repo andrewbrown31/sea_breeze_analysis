@@ -11,7 +11,7 @@
 
 #Set up conda/shell environments 
 module use /g/data/xp65/public/modules
-module load conda/analysis3-24.07
+module load conda/analysis3-25.10
 
 module use /g/data/dk92/apps/Modules/modulefiles
 module load gadi_jupyterlab/23.02
@@ -46,7 +46,7 @@ while [[ "$current_date" < "$end_date" ]]; do
         new_month=1
     fi
 
-    python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/sea_breeze_composite.py "$start_time" "$end_time" --region southern --lat_start "-45" --lat_end "-30" --lon_start 135 --lon_end 155
+    #python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/sea_breeze_composite.py "$start_time" "$end_time" --region southern --lat_start "-45" --lat_end "-30" --lon_start 135 --lon_end 155
 
     #If we are into the next month, advance to the first of the next month
     #Otherwise, advance by the specified interval

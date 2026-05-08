@@ -2,16 +2,16 @@
 
 #PBS -P ng72 
 #PBS -q normal
-#PBS -l walltime=12:00:00,mem=190GB 
-#PBS -l ncpus=8
+#PBS -l walltime=48:00:00,mem=190GB 
+#PBS -l ncpus=48
 #PBS -l jobfs=32gb
-#PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_sb_composite_illawara.o 
-#PBS -e /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_sb_composite_illawara.e
-#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92+gdata/ob53+scratch/gb02
+#PBS -o /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_cf1.o 
+#PBS -e /home/548/ab4502/working/ExtremeWind/jobs/messages/barra_c_cf1.e
+#PBS -l storage=gdata/ng72+gdata/hh5+gdata/ua8+gdata/ng72+gdata/bs94+gdata/xp65+gdata/dk92+gdata/ob53
 
 #Set up conda/shell environments 
 module use /g/data/xp65/public/modules
-module load conda/analysis3-25.10
+module load conda/analysis3-25.08
 
 module use /g/data/dk92/apps/Modules/modulefiles
 module load gadi_jupyterlab/23.02
@@ -19,7 +19,7 @@ jupyter.ini.sh -D
 
 #Set the start and end dates, and the current date as the start date
 start_date="1979-01-01"
-end_date="2024-12-31"
+end_date="1989-12-31"
 current_date="$start_date 00:00:00"
 
 #Set an optional interval for the time range
@@ -46,7 +46,7 @@ while [[ "$current_date" < "$end_date" ]]; do
         new_month=1
     fi
 
-    #python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/sea_breeze_composite.py "$start_time" "$end_time" --region illawara --lat_start "-45" --lat_end "-30" --lon_start 135 --lon_end 155
+    python /home/548/ab4502/working/sea_breeze_analysis/capacity_factor_time_series.py "$start_time" "$end_time" --u_var ua100m --v_var va100m
 
     #If we are into the next month, advance to the first of the next month
     #Otherwise, advance by the specified interval
@@ -58,6 +58,3 @@ while [[ "$current_date" < "$end_date" ]]; do
     fi
 
 done    
-
-#Combine the output files into seasonal averages and delete the monthly files
-python /home/548/ab4502/working/sea_breeze_analysis/composite_analysis/sea_breeze_composite_sum.py --region illawara

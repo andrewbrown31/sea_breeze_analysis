@@ -1,6 +1,6 @@
 # Sea breeze analysis
 
-A collection of scripts and notebooks for calculating and analysing sea breeze objects from model data. Sea breeze objects are defined using code from the [sea_breeze](https://github.com/andrewbrown31/sea_breeze) repository. This repository includes notebooks for [generating figures for Brown et al. (submitted) and Brown and Vincent (submitted)](#figures). 
+A collection of scripts and notebooks for calculating and analysing sea breeze objects from model data. Sea breeze objects are defined using code from the [sea_breeze](https://github.com/andrewbrown31/sea_breeze) repository. This repository includes notebooks for [generating figures for Brown et al. (2026) and Brown and Vincent (in review)](#figures). 
 
 ## Model preprocessing
 
@@ -16,12 +16,12 @@ First, the thresholds for identifying sea breeze objects from the diagnostics ar
 
 ## Analysis
 
-For Brown et al. (submitted): Identifying sea breezes from atmospheric model output (sea_breeze v1.1)
+For Brown et al. (2026): Identifying sea breezes from atmospheric model output (sea_breeze v1.1)
 
 * [Diurnal compositing of sea breeze objects and wind](diurnal_groupby.py)
 * [Analysis notebooks](/analysis_notebooks/)
 
-For Brown and Vincent (submitted): The impact of sea breezes on offshore wind energy resources in Australia
+For Brown and Vincent (in review): The impact of sea breezes on offshore wind energy resources in Australia
 
 * [Calculate sea breeze objects over 1979-2024 from BARRA-C2](/barra_c/filter_jobs/filter_F_driver.sh)
 * [Define the shapes of the coastal zones for defining sea breeze days for each offshore wind area](/composite_analysis/coastal_shapes.py)
@@ -30,7 +30,7 @@ For Brown and Vincent (submitted): The impact of sea breezes on offshore wind en
 
 ## Figures 
 
-For Brown et al. (submitted): Identifying sea breezes from atmospheric model output (sea_breeze v1.1)
+For Brown et al. (2026): Identifying sea breezes from atmospheric model output (sea_breeze v1.1)
 
 * [Figure 2](/analysis_notebooks/coastline_notepad.ipynb)
 * [Figure 3-8](/analysis_notebooks/case_studies.ipynb)
@@ -42,7 +42,7 @@ For Brown et al. (submitted): Identifying sea breezes from atmospheric model out
 * [Figure S4](/analysis_notebooks/case_studies.ipynb)
 * [Figure S5 and S6](/analysis_notebooks/diurnal_hovmoller_plots.ipynb)
 
-For Brown and Vincent (submitted): The impact of sea breezes on offshore wind energy resources in Australia
+For Brown and Vincent (in review): The impact of sea breezes on offshore wind energy resources in Australia
 * [Figure 1-3](/analysis_notebooks/climo.ipynb)
 * [Figure 4](/analysis_notebooks/sb_days_stats_rez.ipynb)
 * [Figure 5-8](/analysis_notebooks/composite_rez.ipynb)
@@ -53,6 +53,6 @@ For Brown and Vincent (submitted): The impact of sea breezes on offshore wind en
 
 ## References
 
-Brown, A., Vincent, C., and Short, E.: Identifying sea breezes from atmospheric model output (sea_breeze v1.1), EGUsphere [preprint], https://doi.org/10.5194/egusphere-2025-4848, 2025.
+Brown, A., Vincent, C., and Short, E.: Identifying sea breezes from atmospheric model output (sea_breeze v1.1), Geosci. Model Dev., 19, 933–953, https://doi.org/10.5194/gmd-19-933-2026, 2026.
 
-Brown, A. and Vincent, C.: The impact of sea breezes on offshore wind energy resources in Australia (submitted).
+Brown, A. and Vincent, C.: The impact of sea breezes on offshore wind energy resources in Australia, Wind Energ. Sci. Discuss. [preprint], https://doi.org/10.5194/wes-2026-11, in review, 2026.

@@ -299,6 +299,6 @@ def iea_ref_10mw(ws):
     interp = cs(ws)
 
     interp[ws<3]=0
-    interp[ws>=22.5]=0
+    interp[ws>=25]=0
 
     return interp    

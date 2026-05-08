@@ -74,12 +74,40 @@ if __name__ == "__main__":
         "1hr",
         lat_slice,
         lon_slice,
-        chunks={"time":1,"lat":-1,"lon":-1})    
+        chunks={"time":1,"lat":-1,"lon":-1})   
+
+    u850 = load_model_data.load_barra_variable(
+        "ua850",
+        t1,
+        t2,
+        "AUST-04",
+        "1hr",
+        lat_slice,
+        lon_slice,
+        chunks={"time":1,"lat":-1,"lon":-1})
+    v850 = load_model_data.load_barra_variable(
+        "va850",
+        t1,
+        t2,
+        "AUST-04",
+        "1hr",
+        lat_slice,
+        lon_slice,
+        chunks={"time":1,"lat":-1,"lon":-1})            
 
     #Calculate the wind speed, and the wind power capacity factor
     ws = np.sqrt(u**2 + v**2).persist()
     print("Calculating capacity factor for times {} to {}".format(t1, t2))
     cf = (xr.apply_ufunc(iea_ref_10mw,ws,dask="parallelized") / 10638.301)
+
+    #Load the coastline angles
+    theta = load_model_data.get_coastline_angle_kernel(
+        compute=False,path_to_load="/g/data/ng72/ab4502/coastline_data/barra_c.nc",lon_slice=lon_slice,lat_slice=lat_slice)["angle"]
+
+    #Calculate u' and v' (alongshore and offshore wind components)
+    up,vp = sea_breeze_funcs.rotate_wind(u,v,theta)
+    up850,vp850 = sea_breeze_funcs.rotate_wind(u850,v850,theta)
+
     #cf_daily = cf.resample({"time":"1D"}).mean()
 
     #Load the REZ boundaries
@@ -138,5 +166,41 @@ if __name__ == "__main__":
         df_cf = pd.concat([df_cf, temp_df], axis=1)
         # Save the results to a CSV file for this time period and REZ
     df_cf.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_cf_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
+
+    df_up = pd.DataFrame()
+    for r,name in zip(rez_id, rez_name):
+        temp_df = xr.where(shapes["rez_mask"]==r,up,np.nan).mean(("lat","lon")).drop_vars(
+            ["crs","region","abbrevs","names"]
+            ).to_dataframe(name=name)
+        df_up = pd.concat([df_up, temp_df], axis=1)
+        # Save the results to a CSV file for this time period and REZ
+    df_up.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_up_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
+
+    df_vp = pd.DataFrame()
+    for r,name in zip(rez_id, rez_name):
+        temp_df = xr.where(shapes["rez_mask"]==r,vp,np.nan).mean(("lat","lon")).drop_vars(
+            ["crs","region","abbrevs","names"]
+            ).to_dataframe(name=name)
+        df_vp = pd.concat([df_vp, temp_df], axis=1)
+        # Save the results to a CSV file for this time period and REZ
+    df_vp.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_vp_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
+
+    df_up850 = pd.DataFrame()
+    for r,name in zip(rez_id, rez_name):
+        temp_df = xr.where(shapes["rez_mask"]==r,up850,np.nan).mean(("lat","lon")).drop_vars(
+            ["crs","region","abbrevs","names"]
+            ).to_dataframe(name=name)
+        df_up850 = pd.concat([df_up850, temp_df], axis=1)
+        # Save the results to a CSV file for this time period and REZ
+    df_up850.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_up850_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
+
+    df_vp850 = pd.DataFrame()
+    for r,name in zip(rez_id, rez_name):
+        temp_df = xr.where(shapes["rez_mask"]==r,vp850,np.nan).mean(("lat","lon")).drop_vars(
+            ["crs","region","abbrevs","names"]
+            ).to_dataframe(name=name)
+        df_vp850 = pd.concat([df_vp850, temp_df], axis=1)
+        # Save the results to a CSV file for this time period and REZ
+    df_vp850.to_csv(f"/g/data/ng72/ab4502/capacity_factor/hourly_vp850_ts_barra_c_{start_time.strftime('%Y%m%d')}_{end_time.strftime('%Y%m%d')}.csv", index=True)
 
     client.close()

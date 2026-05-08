@@ -20,7 +20,9 @@ def preprocess_nonsb(ds):
 
 if __name__ == "__main__":
 
-    client = Client(scheduler_file=os.environ["DASK_PBS_SCHEDULER"])
+    #client = Client(scheduler_file=os.environ["DASK_PBS_SCHEDULER"])
+    client = Client(threads_per_worker=1)
+
 
     # Argument parser for the script
     parser = argparse.ArgumentParser(
@@ -66,6 +68,10 @@ if __name__ == "__main__":
 
         sb_avg.to_netcdf("/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_sb_composite_"+region+"_"+season+".nc")
         nonsb_avg.to_netcdf("/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_nonsb_composite_"+region+"_"+season+".nc")
+        #sb_avg.to_zarr("/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_sb_composite_"+region+"_"+season+".zarr")
+        #nonsb_avg.to_zarr("/g/data/ng72/ab4502/hourly_composites/barra_c/barra_c_hourly_nonsb_composite_"+region+"_"+season+".zarr")
+
+        del sb_avg, nonsb_avg
 
     #Remove the monthly files from disk
     for f in sb_files:
